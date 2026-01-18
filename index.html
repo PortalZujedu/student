@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<!-- saved from url=(0060)https://portal.zuj.edu.jo/faces/ui/pages/student/index.xhtml -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head id="j_idt2"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+             <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+            <link rel="shortcut icon" type="image/x-icon" href="/resources/barcelona-layout/images/x-icon.jpeg">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">    
+            <!-- <style>
+                body {
+    display: flex; /* لترتيب المنيو والمحتوى جنباً إلى جنب */
+margin: 0;
+    height: 100vh;
+  
+}
+/* تنسيق النافذة المنبثقة */
+.modal {
+    display: none; /* مخفية افتراضياً */
+    position: fixed;
+    z-index: 2000; /* فوق المنيو والمحتوى */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.8); /* خلفية سوداء شفافة */
+}
+
+.modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+    margin-top: 100px;
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    left: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+                /* القائمة الجانبية */
+        .sidebar {
+            height: 100vh;
+            width: 250px; /* العرض الافتراضي */
+            transition: width 0.3s ease; /* سلاسة الحركة */
+    flex-shrink: 0; /* يمنع المنيو من الانكماش إذا كبر المحتوى */
+           position: relative;
+            right: 0;
+            top: 0;
+            background-color: #fff;
+            border-left: 1px solid #ddd;
+            transition: 0.3s; /* سرعة الحركة عند الفتح والإغلاق */
+            overflow-x: hidden;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        /* الحالة عندما تكون القائمة مغلقة */
+        .sidebar.closed {
+            width: 60px;
+        }
+
+        /* ترويسة القائمة (الأيقونة والعنوان) */
+        .sidebar-header {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            color: #008b8b;
+        }
+
+        .sidebar-header i {
+            font-size: 24px;
+            min-width: 40px;
+        }
+
+        .sidebar-header span {
+            font-weight: bold;
+            white-space: nowrap;
+            opacity: 1;
+            transition: 0.2s;
+        }
+
+        /* إخفاء النص عند الإغلاق */
+        .sidebar.closed .sidebar-header span,
+        .sidebar.closed .nav-item span {
+            display: none;
+        }
+
+        /* روابط القائمة */
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-item {
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            color: #555;
+            text-decoration: none;
+            border-bottom: 1px solid #f9f9f9;
+            transition: 0.2s;
+        }
+
+        .nav-item:hover {
+            background-color: #f0fdfa;
+            color: #008b8b;
+        }
+
+        .nav-item i {
+            min-width: 40px;
+            font-size: 18px;
+        }
+
+        .nav-item span {
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        /* مساحة المحتوى الرئيسي */
+        .main-content {
+            flex-grow: 1; 
+    overflow-y: auto;
+            margin-right: 250px;
+            padding: 20px;
+            transition: 0.3s;
+        }
+
+        .main-content.expanded {
+            margin-right: 60px;
+        }
+            </style> -->
+          <style>
+          /* الحاوية الرئيسية للقائمة الجانبية */
+.layout-tabmenu {
+    display: flex; /* وضع الأيقونات والمنيو بجانب بعض */
+    align-items: stretch;
+    height: 100vh;
+}
+
+/* شريط الأيقونات الرفيع */
+.layout-tabmenu-nav {
+    width: 60px; /* عرض ثابت للأيقونات */
+    flex-shrink: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background: #f4f4f4; /* لون خلفية الأيقونات */
+    border-right: 1px solid #dee2e6;
+}
+
+/* حاوية القوائم الفرعية التي ستفتح بجانب الأيقونات */
+.layout-menu-container {
+    flex-grow: 1; /* تأخذ باقي المساحة المتوفرة */
+    background: #ffffff;
+    padding: 20px 10px;
+    width: 200px; /* عرض القائمة المفتوحة */
+    box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+}
+
+/* تنسيق الروابط داخل القائمة المفتوحة */
+.sub-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sub-menu li a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+}
+.sidebar {
+    width: 300px;
+    background-color: #ffffff;
+    height: 100vh;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    color: #444;
+}
+
+.header-title {
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-right: auto; /* لدفع النص لليسار قليلاً */
+}
+
+.pin-icon {
+    margin-right: 15px;
+    transform: rotate(45deg);
+    font-size: 0.9rem;
+}
+
+.menu-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: #666;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.menu-item:hover {
+    background-color: #f9f9f9;
+}
+
+/* حالة العنصر المختار (اللغة في الصورة) */
+.menu-item.active {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.icon-right {
+    font-size: 1.2rem;
+    margin-left: 15px; /* مسافة بين الأيقونة والنص */
+    width: 25px;
+    text-align: center;
+}
+
+.text {
+    flex-grow: 1;
+    font-size: 12.5px;
+    font-weight: bold;
+}
+
+.arrow-left {
+    font-size: 0.8rem;
+    color: #999;
+}
+          </style>
+            <link rel="shortcut icon" type="image/x-icon" href="https://portal.zuj.edu.jo/resources/barcelona-layout/images/x-icon.jpeg">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+            <meta name="apple-mobile-web-app-capable" content="yes"><link type="text/css" rel="stylesheet" href="./جامعة الزيتونة الأردنية_files/theme.css"><link type="text/css" rel="stylesheet" href="./جامعة الزيتونة الأردنية_files/font-awesome.css"><script type="text/javascript" src="./جامعة الزيتونة الأردنية_files/jquery.js.download"></script><script type="text/javascript" src="./جامعة الزيتونة الأردنية_files/jquery-plugins.js.download"></script><script type="text/javascript" src="./جامعة الزيتونة الأردنية_files/core.js.download"></script><script type="text/javascript" src="./جامعة الزيتونة الأردنية_files/components.js.download"></script><link type="text/css" rel="stylesheet" href="./جامعة الزيتونة الأردنية_files/components.css"><link type="text/css" rel="stylesheet" href="./جامعة الزيتونة الأردنية_files/charts.css"><script type="text/javascript" src="./جامعة الزيتونة الأردنية_files/charts.js.download"></script><link type="text/css" rel="stylesheet" href="./جامعة الزيتونة الأردنية_files/scrollpanel.css"><script type="text/javascript" src="./جامعة الزيتونة الأردنية_files/scrollpanel.js.download"></script><link type="text/css" rel="stylesheet" href="./جامعة الزيتونة الأردنية_files/nanoscroller.css"><link type="text/css" rel="stylesheet" href="./جامعة الزيتونة الأردنية_files/animate.css"><link type="text/css" rel="stylesheet" href="./جامعة الزيتونة الأردنية_files/ripple.css"><link type="text/css" rel="stylesheet" href="./جامعة الزيتونة الأردنية_files/custom_edu.css"><link type="text/css" rel="stylesheet" href="./جامعة الزيتونة الأردنية_files/layout-green.css"><link type="text/css" rel="stylesheet" href="./جامعة الزيتونة الأردنية_files/custom_ar.css"><script type="text/javascript">if(window.PrimeFaces){PrimeFaces.settings.locale='ar';}</script>
+        <title>جامعة الزيتونة الأردنية</title><script type="text/javascript" src="./جامعة الزيتونة الأردنية_files/nanoscroller.js.download"></script><script type="text/javascript" src="./جامعة الزيتونة الأردنية_files/layout.js.download"></script><script type="text/javascript" src="./جامعة الزيتونة الأردنية_files/common.js.download"></script></head><body class="main-body" dir="RTL">  
+            <div class="layout-wrapper  layout-rtl">
+
+    <div class="topbar">
+        <div class="logo"><a href="https://portal.zuj.edu.jo/faces/ui/pages/student/index.xhtml"><img id="j_idt14" src="./جامعة الزيتونة الأردنية_files/x-icon.jpeg" alt=""></a>
+        </div>
+
+        <a id="topbar-menu-button" href="https://portal.zuj.edu.jo/faces/ui/pages/student/index.xhtml#">
+            <i class="fa fa-bars"></i>
+        </a><a href="https://portal.zuj.edu.jo/faces/ui/pages/student/index.xhtml" class="app-name white">البوابة الالكترونية</a>
+
+        <ul class="topbar-menu fadeInDown animated">
+            <li class="profile-item">
+                <a href="https://portal.zuj.edu.jo/faces/ui/pages/student/index.xhtml#">                            
+                    <div class="profile-image"><img id="j_idt18" src="./جامعة الزيتونة الأردنية_files/no_image.png" alt="" title="عبدالله فراس فوزي دحبور">
+                    </div>
+                    <div class="profile-info">
+                        <span class="topbar-item-name profile-name">202410143</span>
+                        <span class="topbar-item-name profile-role">طالب</span>
+                    </div>
+                </a>
+
+                <ul class="animated">
+
+                    <li role="menuitem"><a id="j_idt20" href="https://portal.zuj.edu.jo/faces/ui/pages/student/index.xhtml#" class="ui-commandlink ui-widget Animated05" onclick="PF(&#39;userPreferencesDialog&#39;).show();;PrimeFaces.ab({s:&quot;j_idt20&quot;});return false;">
+                            <i class="fa fa-fw fa-cog"></i>
+                            خصائص المستخدم
+                        </a>
+
+                    </li>
+                    <li role="menuitem">
+<form id="j_idt23" name="j_idt23" method="post" action="https://portal.zuj.edu.jo/faces/ui/pages/student/index.xhtml" enctype="application/x-www-form-urlencoded">
+<input type="hidden" name="j_idt23" value="j_idt23">
+<a id="j_idt23:j_idt24" href="https://portal.zuj.edu.jo/faces/ui/pages/student/index.xhtml#" class="ui-commandlink ui-widget" onclick="PrimeFaces.addSubmitParam(&#39;j_idt23&#39;,{&#39;j_idt23:j_idt24&#39;:&#39;j_idt23:j_idt24&#39;}).submit(&#39;j_idt23&#39;);return false;">
+                                <i class="fa fa-fw fa-sign-out"></i>
+                                خروج
+                            </a><input type="hidden" name="javax.faces.ViewState" id="j_id1:javax.faces.ViewState:0" value="3125881992265779451:8707827611106217298" autocomplete="off">
+</form>
+                    </li>
+                </ul>
+            </li>
+                <li>
+                    <a href="https://portal.zuj.edu.jo/faces/ui/pages/student/index.xhtml#" title="الرسائل">
+                        <i class="topbar-icon material-icons animated swing fa fa-fw fa-envelope-o"></i>
+                        <span class="topbar-badge animated rubberBand" style="background: #ff432e; color: #ffffff;">0</span>
+                        <span class="topbar-item-name">الرسائل</span>
+                    </a>
+                </li>
+            <li>
+                <a href="https://portal.zuj.edu.jo/faces/ui/pages/student/index.xhtml#" title="تنبيه الغياب">
+                    <i class="topbar-icon fa fa-fw fa-bell-o"></i>
+                    <span class="topbar-badge animated rubberBand" style="background: #ff432e; color: #ffffff;">
+                        0
+                    </span>
+                    <span class="topbar-item-name"> تنبيه الغياب</span>
+                </a>
+            </li>
+
+        </ul>
+<form id="j_idt38" name="j_idt38" method="post" action="https://portal.zuj.edu.jo/faces/ui/pages/student/index.xhtml" enctype="application/x-www-form-urlencoded">
+<input type="hidden" name="j_idt38" value="j_idt38">
+<div id="j_idt38:j_idt39" class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-shadow ui-hidden-container ui-dialog-rtl ui-draggable ui-resizable" role="dialog" aria-labelledby="j_idt38:j_idt39_title" aria-hidden="true" style="width: auto; height: auto;"><div class="ui-dialog-titlebar ui-widget-header ui-helper-clearfix ui-corner-top ui-draggable-handle"><span id="j_idt38:j_idt39_title" class="ui-dialog-title">خصائص المستخدم</span><a href="https://portal.zuj.edu.jo/faces/ui/pages/student/index.xhtml#" class="ui-dialog-titlebar-icon ui-dialog-titlebar-close ui-corner-all" aria-label="Close" role="button"><span class="ui-icon ui-icon-closethick"></span></a></div><div class="ui-dialog-content ui-widget-content" style="height: auto;"><table id="j_idt38:j_idt40" class="ui-panelgrid ui-widget" role="grid"><tbody><tr class="ui-widget-content" role="row"><td role="gridcell" class="ui-panelgrid-cell"><label id="j_idt38:j_idt41" class="ui-outputlabel ui-widget">اللغة المفضلة</label></td><td role="gridcell" class="ui-panelgrid-cell"><div id="j_idt38:j_idt42" class="ui-selectonemenu ui-widget ui-state-default ui-corner-all"><div class="ui-helper-hidden-accessible"><input id="j_idt38:j_idt42_focus" name="j_idt38:j_idt42_focus" type="text" autocomplete="off" role="combobox" aria-haspopup="true" aria-expanded="false" readonly="readonly" aria-autocomplete="list" aria-owns="j_idt38:j_idt42_items" aria-activedescendant="j_idt38:j_idt42_0" aria-describedby="j_idt38:j_idt42_0" aria-disabled="false"></div><div class="ui-helper-hidden-accessible"><select id="j_idt38:j_idt42_input" name="j_idt38:j_idt42_input" tabindex="-1"><option value="" selected="selected">يرجى الاختيار ...</option><option value="1">العربية</option><option value="2">English</option></select></div><label id="j_idt38:j_idt42_label" class="ui-selectonemenu-label ui-inputfield ui-corner-all">يرجى الاختيار ...</label><div class="ui-selectonemenu-trigger ui-state-default ui-corner-right"><span class="ui-icon ui-icon-triangle-1-s ui-c"></span></div></div></td></tr><tr class="ui-widget-content" role="row"><td role="gridcell" class="ui-panelgrid-cell"><label id="j_idt38:j_idt45" class="ui-outputlabel ui-widget">تلقي التنبيهات ؟</label></td><td role="gridcell" class="ui-panelgrid-cell"><div id="j_idt38:j_idt46" class="ui-chkbox ui-widget"><div class="ui-helper-hidden-accessible"><input id="j_idt38:j_idt46_input" name="j_idt38:j_idt46_input" type="checkbox" autocomplete="off" checked="checked" aria-checked="true"></div><div class="ui-chkbox-box ui-widget ui-corner-all ui-state-default ui-state-active"><span class="ui-chkbox-icon ui-icon ui-icon-check ui-c"></span></div></div></td></tr><tr class="ui-widget-content" role="row"><td role="gridcell" class="ui-panelgrid-cell"><label id="j_idt38:j_idt47" class="ui-outputlabel ui-widget">لون البوابة المفضل</label></td><td role="gridcell" class="ui-panelgrid-cell"><div id="j_idt38:j_idt48" class="ui-selectonemenu ui-widget ui-state-default ui-corner-all"><div class="ui-helper-hidden-accessible"><input id="j_idt38:j_idt48_focus" name="j_idt38:j_idt48_focus" type="text" autocomplete="off" role="combobox" aria-haspopup="true" aria-expanded="false" readonly="readonly" aria-autocomplete="list" aria-owns="j_idt38:j_idt48_items" aria-activedescendant="j_idt38:j_idt48_0" aria-describedby="j_idt38:j_idt48_0" aria-disabled="false"></div><div class="ui-helper-hidden-accessible"><select id="j_idt38:j_idt48_input" name="j_idt38:j_idt48_input" tabindex="-1" onchange="PrimeFaces.ab({s:&quot;j_idt38:j_idt48&quot;,e:&quot;change&quot;,p:&quot;j_idt38:j_idt48&quot;});"><option value="" selected="selected">يرجى الاختيار ...</option><option value="blue">blue</option><option value="teal">teal</option><option value="cyan">cyan</option><option value="blue-grey">blue-grey</option><option value="dark-blue">dark-blue</option><option value="dark-green">dark-green</option><option value="light-blue">light-blue</option><option value="indigo">indigo</option><option value="deep-purple">deep-purple</option><option value="green">green</option></select></div><label id="j_idt38:j_idt48_label" class="ui-selectonemenu-label ui-inputfield ui-corner-all">يرجى الاختيار ...</label><div class="ui-selectonemenu-trigger ui-state-default ui-corner-right"><span class="ui-icon ui-icon-triangle-1-s ui-c"></span></div></div></td></tr></tbody></table><img id="j_idt38:j_idt60" height="10px;" alt="" src="./جامعة الزيتونة الأردنية_files/dot_clear.gif"><button id="j_idt38:saveUserPreferenceBtn" name="j_idt38:saveUserPreferenceBtn" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left red-btn" onclick="PrimeFaces.ab({s:&quot;j_idt38:saveUserPreferenceBtn&quot;,onco:function(xhr,status,args){PF(&#39;userPreferencesDialog&#39;).hide();;}});return false;" title="حفظ" type="submit" role="button" aria-disabled="false"><span class="ui-button-icon-left ui-icon ui-c fa fa-save white"></span><span class="ui-button-text ui-c">حفظ</span></button><img id="j_idt38:j_idt61" width="10px;" alt="" src="./جامعة الزيتونة الأردنية_files/dot_clear.gif"><button id="j_idt38:j_idt62" name="j_idt38:j_idt62" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left orange-btn" onclick="PrimeFaces.ab({s:&quot;j_idt38:j_idt62&quot;,onco:function(xhr,status,args){PF(&#39;userPreferencesDialog&#39;).hide();;}});return false;" title="الغاء" type="submit" role="button" aria-disabled="false"><span class="ui-button-icon-left ui-icon ui-c fa fa-close white"></span><span class="ui-button-text ui-c">الغاء</span></button></div><div class="ui-resizable-handle ui-resizable-n" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-s" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-e" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-w" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-ne" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-nw" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-sw" style="z-index: 90;"></div></div><input type="hidden" name="javax.faces.ViewState" id="j_id1:javax.faces.ViewState:1" value="3125881992265779451:8707827611106217298" autocomplete="off">
+</form>
+    </div>
+  
+ <div class="layout-sidebar " style="overflow: visible;">
+    <div id="j_idt65" class="layout-tabmenu">
+        <ul class="layout-tabmenu-nav">
+            <li class="active-item">
+                <a href="#" class="ripplelink tabmenuitem-link">
+                    <i class="material-icons">home</i></a>
+                    <div class="layout-tabmenu-tooltip" style="display: none;">
+                        <div class="layout-tabmenu-tooltip-arrow"></div>
+                        <div class="layout-tabmenu-tooltip-text">الصفحة الرئيسية</div></div></li>
+            <li><a href="#" class="ripplelink tabmenuitem-link">
+                            <i class="material-icons">inbox</i></a>
+                            <div class="layout-tabmenu-tooltip" style="display: none;">
+                                <div class="layout-tabmenu-tooltip-arrow"></div>
+                         <div class="layout-tabmenu-tooltip-text">الرسائل الواردة</div></div></li>
+            <li><a href="#" class="ripplelink tabmenuitem-link">
+                                    <i class="material-icons">people</i></a>
+                                    <div class="layout-tabmenu-tooltip">
+                                        <div class="layout-tabmenu-tooltip-arrow"></div>
+                        <div class="layout-tabmenu-tooltip-text">الهيئة التدريسية</div></div></li>
+        </ul>
+        <div class="layout-menu-container">
+    <div class="layout-submenu-content active-submenu" id="home-submenu">
+        <ul class="menu-list">
+        <li class="menu-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-grid-1x2-fill" viewBox="0 0 16 16">
+  <path d="M0 1a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm9 0a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1zm0 9a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1z"/>
+</svg>
+            <span class="text"style=" padding-right: 20px">الصفحة الرئيسية</span>
+        </li>
+        
+        <li class="menu-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear-fill" viewBox="0 0 16 16">
+  <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
+</svg>
+            <span class="text " style=" padding-right: 20px">أوضاع القائمة</span>
+        </li>
+
+        <li class="menu-item active">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-text-right" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-4-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5m4-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-4-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5"/>
+</svg>
+            <span class="text"style=" padding-right: 20px">اللغة</span>
+        </li>
+
+        <li class="menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-palette-fill" viewBox="0 0 16 16">
+  <path d="M12.433 10.07C14.133 10.585 16 11.15 16 8a8 8 0 1 0-8 8c1.996 0 1.826-1.504 1.649-3.08-.124-1.101-.252-2.237.351-2.92.465-.527 1.42-.237 2.433.07M8 5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m4.5 3a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3M5 6.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m.5 6.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
+</svg>
+            <span class="text"style=" padding-right: 20px">القوالب</span>
+        </li>
+
+        <li class="menu-item">
+           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left-text-fill" viewBox="0 0 16 16">
+  <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4.414a1 1 0 0 0-.707.293L.854 15.146A.5.5 0 0 1 0 14.793zm3.5 1a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z"/>
+</svg>
+            <span class="text"style=" padding-right: 20px">أكاديمي</span>
+        </li>
+
+        <li class="menu-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left-text-fill" viewBox="0 0 16 16">
+  <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4.414a1 1 0 0 0-.707.293L.854 15.146A.5.5 0 0 1 0 14.793zm3.5 1a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z"/>
+</svg>
+            <span class="text"style=" padding-right: 20px">شخصي</span>
+        </li>
+
+        <li class="menu-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left-text-fill" viewBox="0 0 16 16">
+  <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4.414a1 1 0 0 0-.707.293L.854 15.146A.5.5 0 0 1 0 14.793zm3.5 1a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z"/>
+</svg>
+            <span class="text"style=" padding-right: 20px">التسجيل</span>
+        </li>
+
+        <li class="menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left-text-fill" viewBox="0 0 16 16">
+  <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4.414a1 1 0 0 0-.707.293L.854 15.146A.5.5 0 0 1 0 14.793zm3.5 1a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 2.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z"/>
+</svg>
+            <span class="text"style=" padding-right: 20px">روابط خاصة بالطالب</span>
+        </li>
+      <li class="menu-item">
+    <a href="photo.jpg" target="_blank" style="text-decoration: none; color: inherit; display: flex; align-items: center; width: 100%;">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-grid-3x3-gap-fill" viewBox="0 0 16 16">
+            <path d="M1 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zM1 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zM1 12a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1z"/>
+        </svg>
+
+        <span class="text" style="padding-right: 20px;">بطاقة الدخول للامتحان</span>
+        
+    </a>
+</li>
+    </ul>
+    </div>
+</div>
+    </div>
+ </div>
+<form id="contents" name="contents" method="post" action="https://portal.zuj.edu.jo/faces/ui/pages/student/index.xhtml" enctype="application/x-www-form-urlencoded">
+<input type="hidden" name="contents" value="contents">
+<a id="contents:mainReportViewer" href="https://portal.zuj.edu.jo/viewReport?docId=ad9ca268c929d3c5d3c67a093697" class="ui-link ui-widget" target="_blank"></a><span id="contents:msgs"></span>
+                    <div class="layout-main">
+
+
+                        <div class="layout-main-content"><div id="contents:j_idt114" class="ui-breadcrumb ui-module ui-widget ui-widget-header ui-helper-clearfix ui-corner-all" role="menu"><ul><li role="menuitem"><a tabindex="-1" title="الصفحة الرئيسية" class="ui-menuitem-link ui-corner-all ui-icon ui-icon-home" href="https://portal.zuj.edu.jo/"><span class="ui-menuitem-text"></span></a></li><li class="ui-breadcrumb-chevron ui-icon ui-icon-triangle-1-e"></li><li role="menuitem"><a tabindex="-1" title="الصفحة الرئيسية" class="ui-menuitem-link ui-corner-all" href="https://portal.zuj.edu.jo/faces/ui/pages/student/index.xhtml"><span class="ui-menuitem-text">الصفحة الرئيسية</span></a></li></ul></div><a id="contents:viewReport" href="https://portal.zuj.edu.jo/viewReport?docId=ad9ca268c929d3c5d3c67a093697" class="ui-link ui-widget" target="_blank"></a><div id="contents:j_idt117" class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-shadow ui-hidden-container ui-draggable ui-resizable" role="dialog" aria-labelledby="contents:j_idt117_title" aria-hidden="true" style="width: auto; height: auto;"><div class="ui-dialog-titlebar ui-widget-header ui-helper-clearfix ui-corner-top ui-draggable-handle"><span id="contents:j_idt117_title" class="ui-dialog-title"></span></div><div class="ui-dialog-content ui-widget-content" style="height: auto;"><div id="contents:j_idt118" class="ui-panel ui-widget ui-widget-content ui-corner-all" data-widget="widget_contents_j_idt118"><div id="contents:j_idt118_header" class="ui-panel-titlebar ui-widget-header ui-helper-clearfix ui-corner-all"><span class="ui-panel-title">الرسالة</span></div><div id="contents:j_idt118_content" class="ui-panel-content ui-widget-content"><div id="contents:j_idt119" class="ui-datatable ui-widget ui-datatable-reflow"><div class="ui-datatable-tablewrapper"><table role="grid"><thead id="contents:j_idt119_head"><tr role="row"><th id="contents:j_idt119:j_idt120" class="ui-state-default" role="columnheader" aria-label="#" style="width:7%;px"><span class="ui-column-title">#</span></th><th id="contents:j_idt119:j_idt122" class="ui-state-default" role="columnheader" aria-label="الرسالة"><span class="ui-column-title">الرسالة</span></th></tr></thead><tbody id="contents:j_idt119_data" class="ui-datatable-data ui-widget-content"><tr data-ri="0" class="ui-widget-content ui-datatable-even" role="row"><td role="gridcell"><span class="ui-column-title">#</span><label id="contents:j_idt119:0:j_idt121" class="ui-outputlabel ui-widget">1</label></td><td role="gridcell"><span class="ui-column-title">الرسالة</span><label id="contents:j_idt119:0:j_idt123" class="ui-outputlabel ui-widget" title="الفترة الحالية تقع ضمن فترة التسجيل">الفترة الحالية تقع ضمن فترة التسجيل</label></td></tr></tbody></table></div></div><img id="contents:j_idt124" height="15px;" alt="" src="./جامعة الزيتونة الأردنية_files/dot_clear.gif"><img id="contents:j_idt134" height="5px;" alt="" src="./جامعة الزيتونة الأردنية_files/dot_clear.gif"><button id="contents:j_idt135" name="contents:j_idt135" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left" onclick="PrimeFaces.ab({s:&quot;contents:j_idt135&quot;,onco:function(xhr,status,args){PF(&#39;notificationDialog&#39;).hide();;}});return false;" title="اغلاق" type="submit" role="button" aria-disabled="false"><span class="ui-button-icon-left ui-icon ui-c fa fa-close white"></span><span class="ui-button-text ui-c">اغلاق</span></button></div></div></div><div class="ui-resizable-handle ui-resizable-n" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-s" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-e" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-w" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-ne" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-nw" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-sw" style="z-index: 90;"></div></div>
+
+        <div class="ui-g dashboard">     
+            <div class="ui-g-12 ui-md-6 ui-lg-6">
+                <div class="ui-g card overview-box overview-box-1"><a href="https://portal.zuj.edu.jo/faces/ui/pages/student/instantMessages/index.xhtml" class="ui-link ui-widget">
+                            <span class="overview-box-name">الرسائل
+                                <i class="topbar-icon material-icons animated swing fa fa-fw fa-envelope-o"></i>
+                            </span>
+                            <span class="overview-box-name">0</span>
+                            <span class="overview-box-badge"></span><img id="contents:j_idt139" src="./جامعة الزيتونة الأردنية_files/chart-1.svg" alt=""></a>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-lg-6">
+                <div class="ui-g card overview-box overview-box-2"><a href="https://portal.zuj.edu.jo/faces/ui/pages/student/homeworks/index.xhtml" class="ui-link ui-widget">
+                        <span class="overview-box-name">الواجب الدراسي
+                            <i class="topbar-icon material-icons animated swing fa fa-fw fa-edit"></i>
+                        </span>
+                        <span class="overview-box-name">0</span>
+                        <span class="overview-box-badge"></span><img id="contents:j_idt143" src="./جامعة الزيتونة الأردنية_files/chart-2.svg" alt=""></a>
+                </div>
+
+            </div>
+
+            <div class="ui-g-12 ui-lg-6">
+                <div class="user-card ui-shadow-content">
+                    <div class="user-card-header"><img id="contents:j_idt145" src="./جامعة الزيتونة الأردنية_files/user-card-header.png" alt="">
+                    </div>
+                    <div class="user-card-content"> 
+                        <div class="user-card-name">
+                            <span>عبدالله فراس فوزي دحبور</span>
+                        </div>
+
+                        <div class="user-detail" style="direction: RTL;">
+                            <div class="icon-bar"><a href="https://portal.zuj.edu.jo/faces/ui/pages/student/schedule/index.xhtml" class="ui-link ui-widget active" title="جدول الطالب"><i href="" class="fa fa-table" style="font-size: x-large;"></i></a><a href="https://portal.zuj.edu.jo/faces/ui/pages/student/registration/index.xhtml" class="ui-link ui-widget active" title="التسجيل الالكتروني"><i class="fa fa-plus-circle" style="font-size: x-large;"></i></a><a href="https://portal.zuj.edu.jo/faces/ui/pages/student/courseResult/index.xhtml" class="ui-link ui-widget active" title="نتائج المواد"><i class="fa fa-bar-chart" style="font-size: x-large;"></i></a><a href="https://portal.zuj.edu.jo/faces/ui/pages/student/transcript/index.xhtml" class="ui-link ui-widget active" title="السجل الاكاديمي"><i class="fa fa-file-text-o" style="font-size: x-large;"></i></a>
+                            </div>
+                            <ul>
+                                <li class="clearfix">
+                                    <div class="project-progressbar">
+                                        <div class="project-progressbar-value" style="width: 100%"></div>
+                                    </div>
+                                    <i class="fa fa-edit fa-fw"></i>
+                                    <span class="project-title Fs12">الواجب الدراسي</span>
+                                    <span class="project-detail">
+                                            0
+                                        
+
+                                    </span>
+                                </li>
+                                <li class="clearfix">
+                                    <div class="project-progressbar">
+                                        <div class="project-progressbar-value" style="width: 50%"></div>
+                                    </div>
+                                    <i class="fa fa-usd fa-fw"></i>
+                                    <span class="project-title Fs12">الرصيد</span>
+                                    <span class="project-detail"><a href="https://portal.zuj.edu.jo/faces/ui/pages/student/financialRecord/index.xhtml" class="ui-link ui-widget">
+                                                0 مدين
+                                            </a>
+                                    </span>
+                                </li>
+                                <li class="clearfix">
+                                    <div class="project-progressbar">
+                                        <div class="project-progressbar-value" style="width: 00%"></div>
+                                    </div>
+                                    <i class="fa fa-users fa-fw"></i>
+                                    <span class="project-title Fs12">تنبيهات الغياب</span>
+                                    <span class="project-detail"><a href="https://portal.zuj.edu.jo/faces/ui/pages/student/absence/index.xhtml" class="ui-link ui-widget">
+                                                0
+                                            </a>
+
+                                    </span>                                 
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui-g-12 ui-lg-6"><div id="contents:j_idt174" class="ui-panel ui-widget ui-widget-content ui-corner-all ui-shadow-content" data-widget="widget_contents_j_idt174"><div id="contents:j_idt174_header" class="ui-panel-titlebar ui-widget-header ui-helper-clearfix ui-corner-all"><span class="ui-panel-title">صوت</span></div><div id="contents:j_idt174_content" class="ui-panel-content ui-widget-content">
+
+
+
+                    <ul style="list-style: none">
+
+                        <li><label id="contents:j_idt176" class="ui-outputlabel ui-widget" style="font-weight: bold !important;">كيف تقيم خدمة التسجيل من خلال الانترنت؟</label>
+                        </li>
+                        <li>
+
+                            <span class="pricing-feature-text Fs18"><table id="contents:j_idt179" role="presentation" class="ui-selectoneradio ui-widget"><tbody><tr><td><div class="ui-radiobutton ui-widget"><div class="ui-helper-hidden-accessible"><input id="contents:j_idt179:0" name="contents:j_idt179" type="radio" value="1" onchange="PrimeFaces.ab({s:&quot;contents:j_idt179&quot;,e:&quot;change&quot;,p:&quot;contents:j_idt179&quot;,u:&quot;contents:voteBtn&quot;});"></div><div class="ui-radiobutton-box ui-widget ui-corner-all ui-state-default"><span class="ui-radiobutton-icon ui-icon ui-icon-blank ui-c"></span></div></div></td><td><label for="contents:j_idt179:0">ممتاز</label></td><td><div class="ui-radiobutton ui-widget"><div class="ui-helper-hidden-accessible"><input id="contents:j_idt179:1" name="contents:j_idt179" type="radio" value="2" onchange="PrimeFaces.ab({s:&quot;contents:j_idt179&quot;,e:&quot;change&quot;,p:&quot;contents:j_idt179&quot;,u:&quot;contents:voteBtn&quot;});"></div><div class="ui-radiobutton-box ui-widget ui-corner-all ui-state-default"><span class="ui-radiobutton-icon ui-icon ui-icon-blank ui-c"></span></div></div></td><td><label for="contents:j_idt179:1">جيد جدا</label></td><td><div class="ui-radiobutton ui-widget"><div class="ui-helper-hidden-accessible"><input id="contents:j_idt179:2" name="contents:j_idt179" type="radio" value="3" onchange="PrimeFaces.ab({s:&quot;contents:j_idt179&quot;,e:&quot;change&quot;,p:&quot;contents:j_idt179&quot;,u:&quot;contents:voteBtn&quot;});"></div><div class="ui-radiobutton-box ui-widget ui-corner-all ui-state-default"><span class="ui-radiobutton-icon ui-icon ui-icon-blank ui-c"></span></div></div></td><td><label for="contents:j_idt179:2">جيد</label></td></tr></tbody></table>
+                            </span>
+                        </li>
+                        <li><img id="contents:j_idt182" height="30px" alt="" src="./جامعة الزيتونة الأردنية_files/dot_clear.gif">
+                        </li>
+                        <li><button id="contents:voteBtn" name="contents:voteBtn" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left ui-state-disabled" style="width: 35%;" type="submit" disabled="disabled" role="button" aria-disabled="true"><span class="ui-button-icon-left ui-icon ui-c fa fa-star-half-full white"></span><span class="ui-button-text ui-c">صوت</span></button>
+
+                        </li>
+                        <li>
+                        </li>
+                    </ul></div></div>
+            </div>
+            <div class="ui-g-12 ui-lg-6 contacts"><div id="contents:j_idt187" class="ui-panel ui-widget ui-widget-content ui-corner-all ui-shadow-content" style="max-height: 300px;" data-widget="widget_contents_j_idt187"><div id="contents:j_idt187_header" class="ui-panel-titlebar ui-widget-header ui-helper-clearfix ui-corner-all"><span class="ui-panel-title">الاخبار</span></div><div id="contents:j_idt187_content" class="ui-panel-content ui-widget-content">
+
+                    <marquee id="news" scrollamount="1" direction="up" loop="true" onmouseover="this.stop();" onmouseout="this.start();" style="width: 100%;text-align: inherit; max-height: 300px;">
+                        <ul>
+                        </ul>
+                    </marquee></div></div>
+            </div>
+
+            <div class="ui-g-12 ui-lg-6 chat"><div id="contents:j_idt191" class="ui-panel ui-widget ui-widget-content ui-corner-all ui-shadow-content" data-widget="widget_contents_j_idt191"><div id="contents:j_idt191_header" class="ui-panel-titlebar ui-widget-header ui-helper-clearfix ui-corner-all"><span class="ui-panel-title">معلومات الطالب</span></div><div id="contents:j_idt191_content" class="ui-panel-content ui-widget-content">
+
+                    <ul>
+                        <li class="clearfix">
+                            <div class="project-progressbar">
+                                <div class="project-progressbar-value" style="width: 50%"></div>
+                            </div>
+                            <span class="project-title Fs12">رقم الطالب :</span>
+                            <span class="project-detail Fs12">
+                                202410143
+                            </span>
+                        </li>
+                        <li class="clearfix">
+                            <div class="project-progressbar">
+                                <div class="project-progressbar-value" style="width: 50%"></div>
+                            </div>
+                            <span class="project-title Fs12">اسم الطالب :</span>
+                            <span class="project-detail Fs12">
+                                عبدالله فراس فوزي دحبور
+                            </span>
+                        </li>
+                        <li class="clearfix">
+                            <div class="project-progressbar">
+                                <div class="project-progressbar-value" style="width: 50%"></div>
+                            </div>
+                            <span class="project-title Fs12">الفصل الدراسي :</span>
+                            <span class="project-detail Fs12">
+                                الفصل الأول 2025/2026
+                            </span>
+                        </li>
+                        <li class="clearfix">
+                            <div class="project-progressbar">
+                                <div class="project-progressbar-value" style="width: 50%"></div>
+                            </div>
+                            <span class="project-title Fs12">الكلية :</span>
+                            <span class="project-detail Fs12">
+                                الــــعلـوم وتكنولوجيا المعلومات
+                            </span>
+                        </li>
+                        <li class="clearfix">
+                            <div class="project-progressbar">
+                                <div class="project-progressbar-value" style="width: 50%"></div>
+                            </div>
+                            <span class="project-title Fs12">التخصص :</span>
+                            <span class="project-detail Fs12">
+                                هندسة البرمجيات
+                            </span>
+                        </li>
+                        <li class="clearfix">
+                            <div class="project-progressbar">
+                                <div class="project-progressbar-value" style="width: 50%"></div>
+                            </div>
+                            <span class="project-title Fs12">الحالة :</span>
+                            <span class="project-detail Fs12">
+                                منتظم
+                            </span>
+                        </li>
+                        <li class="clearfix">
+                            <div class="project-progressbar">
+                                <div class="project-progressbar-value" style="width: 50%"></div>
+                            </div>
+                            <span class="project-title Fs12">المرشد الاكاديمي :</span>
+                            <span class="project-detail Fs12">
+                                
+                            </span>
+                        </li>
+                    </ul></div></div>
+            </div>
+
+            <div class="ui-g-12 ui-lg-12 chat"><div id="contents:j_idt194" class="ui-panel ui-widget ui-widget-content ui-corner-all ui-shadow-content" data-widget="widget_contents_j_idt194"><div id="contents:j_idt194_header" class="ui-panel-titlebar ui-widget-header ui-helper-clearfix ui-corner-all"><span class="ui-panel-title">جدول الطالب</span></div><div id="contents:j_idt194_content" class="ui-panel-content ui-widget-content">
+                    <ul><div id="contents:schedules" class="ui-datatable ui-widget ui-datatable-reflow"><div class="ui-datatable-tablewrapper"><table role="grid"><thead id="contents:schedules_head"><tr role="row"><th id="contents:schedules:j_idt196" class="ui-state-default" role="columnheader" aria-label="رمز المقرر"><span class="ui-column-title">رمز المقرر</span></th><th id="contents:schedules:j_idt198" class="ui-state-default" role="columnheader" aria-label="اسم المقرر"><span class="ui-column-title">اسم المقرر</span></th><th id="contents:schedules:j_idt200" class="ui-state-default" role="columnheader" aria-label="الشعبة"><span class="ui-column-title">الشعبة</span></th><th id="contents:schedules:j_idt202" class="ui-state-default" role="columnheader" aria-label="النشاط"><span class="ui-column-title">النشاط</span></th><th id="contents:schedules:j_idt204" class="ui-state-default" role="columnheader" aria-label="قاعة"><span class="ui-column-title">قاعة</span></th><th id="contents:schedules:j_idt206" class="ui-state-default" role="columnheader" aria-label="الوقت"><span class="ui-column-title">الوقت</span></th></tr></thead><tbody id="contents:schedules_data" class="ui-datatable-data ui-widget-content"><tr data-ri="0" class="ui-widget-content ui-datatable-even" role="row"><td role="gridcell"><span class="ui-column-title">رمز المقرر</span><label id="contents:schedules:0:j_idt197" class="ui-outputlabel ui-widget">0114341</label></td><td role="gridcell"><span class="ui-column-title">اسم المقرر</span><label id="contents:schedules:0:j_idt199" class="ui-outputlabel ui-widget">قواعد البيانات</label></td><td role="gridcell"><span class="ui-column-title">الشعبة</span><label id="contents:schedules:0:j_idt201" class="ui-outputlabel ui-widget">7</label></td><td role="gridcell"><span class="ui-column-title">النشاط</span><label id="contents:schedules:0:j_idt203" class="ui-outputlabel ui-widget">نظري</label></td><td role="gridcell"><span class="ui-column-title">قاعة</span><label id="contents:schedules:0:j_idt205" class="ui-outputlabel ui-widget">م9238</label></td><td role="gridcell"><span class="ui-column-title">الوقت</span><label id="contents:schedules:0:j_idt207" class="ui-outputlabel ui-widget">[ 08:00_09:30 ] ح (و) ث (و)</label></td></tr><tr data-ri="1" class="ui-widget-content ui-datatable-odd" role="row"><td role="gridcell"><span class="ui-column-title">رمز المقرر</span><label id="contents:schedules:1:j_idt197" class="ui-outputlabel ui-widget">0114341</label></td><td role="gridcell"><span class="ui-column-title">اسم المقرر</span><label id="contents:schedules:1:j_idt199" class="ui-outputlabel ui-widget">قواعد البيانات</label></td><td role="gridcell"><span class="ui-column-title">الشعبة</span><label id="contents:schedules:1:j_idt201" class="ui-outputlabel ui-widget">7</label></td><td role="gridcell"><span class="ui-column-title">النشاط</span><label id="contents:schedules:1:j_idt203" class="ui-outputlabel ui-widget">عملي</label></td><td role="gridcell"><span class="ui-column-title">قاعة</span><label id="contents:schedules:1:j_idt205" class="ui-outputlabel ui-widget">60</label></td><td role="gridcell"><span class="ui-column-title">الوقت</span><label id="contents:schedules:1:j_idt207" class="ui-outputlabel ui-widget">[ 16:00_18:00 ] س (و)</label></td></tr><tr data-ri="2" class="ui-widget-content ui-datatable-even" role="row"><td role="gridcell"><span class="ui-column-title">رمز المقرر</span><label id="contents:schedules:2:j_idt197" class="ui-outputlabel ui-widget">0130231</label></td><td role="gridcell"><span class="ui-column-title">اسم المقرر</span><label id="contents:schedules:2:j_idt199" class="ui-outputlabel ui-widget">البرمجة التطبيقية</label></td><td role="gridcell"><span class="ui-column-title">الشعبة</span><label id="contents:schedules:2:j_idt201" class="ui-outputlabel ui-widget">6</label></td><td role="gridcell"><span class="ui-column-title">النشاط</span><label id="contents:schedules:2:j_idt203" class="ui-outputlabel ui-widget">نظري</label></td><td role="gridcell"><span class="ui-column-title">قاعة</span><label id="contents:schedules:2:j_idt205" class="ui-outputlabel ui-widget">م9103</label></td><td role="gridcell"><span class="ui-column-title">الوقت</span><label id="contents:schedules:2:j_idt207" class="ui-outputlabel ui-widget">[ 12:30_14:00 ] ح (و) ث (و)</label></td></tr><tr data-ri="3" class="ui-widget-content ui-datatable-odd" role="row"><td role="gridcell"><span class="ui-column-title">رمز المقرر</span><label id="contents:schedules:3:j_idt197" class="ui-outputlabel ui-widget">0130231</label></td><td role="gridcell"><span class="ui-column-title">اسم المقرر</span><label id="contents:schedules:3:j_idt199" class="ui-outputlabel ui-widget">البرمجة التطبيقية</label></td><td role="gridcell"><span class="ui-column-title">الشعبة</span><label id="contents:schedules:3:j_idt201" class="ui-outputlabel ui-widget">6</label></td><td role="gridcell"><span class="ui-column-title">النشاط</span><label id="contents:schedules:3:j_idt203" class="ui-outputlabel ui-widget">عملي</label></td><td role="gridcell"><span class="ui-column-title">قاعة</span><label id="contents:schedules:3:j_idt205" class="ui-outputlabel ui-widget">60</label></td><td role="gridcell"><span class="ui-column-title">الوقت</span><label id="contents:schedules:3:j_idt207" class="ui-outputlabel ui-widget">[ 10:00_12:00 ] س (و)</label></td></tr><tr data-ri="4" class="ui-widget-content ui-datatable-even" role="row"><td role="gridcell"><span class="ui-column-title">رمز المقرر</span><label id="contents:schedules:4:j_idt197" class="ui-outputlabel ui-widget">0131111</label></td><td role="gridcell"><span class="ui-column-title">اسم المقرر</span><label id="contents:schedules:4:j_idt199" class="ui-outputlabel ui-widget">شبكات الحاسوب</label></td><td role="gridcell"><span class="ui-column-title">الشعبة</span><label id="contents:schedules:4:j_idt201" class="ui-outputlabel ui-widget">2</label></td><td role="gridcell"><span class="ui-column-title">النشاط</span><label id="contents:schedules:4:j_idt203" class="ui-outputlabel ui-widget">نظري</label></td><td role="gridcell"><span class="ui-column-title">قاعة</span><label id="contents:schedules:4:j_idt205" class="ui-outputlabel ui-widget">60-9201</label></td><td role="gridcell"><span class="ui-column-title">الوقت</span><label id="contents:schedules:4:j_idt207" class="ui-outputlabel ui-widget">[ 08:00_09:30 ] ن (م) ر (ن)</label></td></tr></tbody></table></div><div id="contents:schedules_paginator_bottom" class="ui-paginator ui-paginator-bottom ui-widget-header ui-corner-bottom" role="navigation" aria-label="Pagination"><span class="ui-paginator-current">(1 of 2)</span><a href="https://portal.zuj.edu.jo/faces/ui/pages/student/index.xhtml#" class="ui-paginator-first ui-state-default ui-corner-all ui-state-disabled" aria-label="First Page"><span class="ui-icon ui-icon-seek-first">p</span></a><a href="https://portal.zuj.edu.jo/faces/ui/pages/student/index.xhtml#" class="ui-paginator-prev ui-state-default ui-corner-all ui-state-disabled" aria-label="Previous Page"><span class="ui-icon ui-icon-seek-prev">p</span></a><span class="ui-paginator-pages"><a class="ui-paginator-page ui-state-default ui-state-active ui-corner-all" tabindex="0" href="https://portal.zuj.edu.jo/faces/ui/pages/student/index.xhtml#" aria-label="Page 1">1</a><a class="ui-paginator-page ui-state-default ui-corner-all" tabindex="0" href="https://portal.zuj.edu.jo/faces/ui/pages/student/index.xhtml#" aria-label="Page 2">2</a></span><a href="https://portal.zuj.edu.jo/faces/ui/pages/student/index.xhtml#" class="ui-paginator-next ui-state-default ui-corner-all" aria-label="Next Page" tabindex="0"><span class="ui-icon ui-icon-seek-next">p</span></a><a href="https://portal.zuj.edu.jo/faces/ui/pages/student/index.xhtml#" class="ui-paginator-last ui-state-default ui-corner-all" aria-label="Last Page" tabindex="0"><span class="ui-icon ui-icon-seek-end">p</span></a><label id="contents:schedules_rppLabel" for="contents:schedules:j_id2" class="ui-paginator-rpp-label ui-helper-hidden">Rows Per Page</label><select id="contents:schedules:j_id2" name="contents:schedules_rppDD" aria-labelledby="contents:schedules_rppLabel" class="ui-paginator-rpp-options ui-widget ui-state-default ui-corner-left" value="5" autocomplete="off"><option value="5" selected="selected">5</option><option value="10">10</option><option value="15">15</option></select></div></div>
+                    </ul></div></div>
+            </div>
+
+            <div class="ui-g-12 activity-feed"><div id="contents:j_idt210" class="ui-panel ui-widget ui-widget-content ui-corner-all ui-shadow-content" data-widget="widget_contents_j_idt210"><div id="contents:j_idt210_header" class="ui-panel-titlebar ui-widget-header ui-helper-clearfix ui-corner-all"><span class="ui-panel-title">معلومات الطالب الأكاديمية</span></div><div id="contents:j_idt210_content" class="ui-panel-content ui-widget-content">
+                    <h3></h3>
+                    <p></p>
+                    <div class="ui-g">
+                        <div class="ui-g-12 ui-md-4">
+                            <span>المعدل التراكمي</span>
+                            <div class="knob tax">70.1</div>
+                        </div>
+                        <div class="ui-g-12 ui-md-4">
+                            <span>انجاز الخطة</span>
+                            <div class="knob invoice">27 %</div>
+                        </div>
+                        <div class="ui-g-12 ui-md-4">
+                            <span>مستوى الطالب</span>
+                            <div class="knob expense">2</div>
+                        </div>
+                    </div></div></div>
+            </div>
+            <div class="ui-g-12 "><div id="contents:j_idt216" class="ui-panel ui-widget ui-widget-content ui-corner-all ui-shadow-content" data-widget="widget_contents_j_idt216"><div id="contents:j_idt216_header" class="ui-panel-titlebar ui-widget-header ui-helper-clearfix ui-corner-all"><span class="ui-panel-title">معلومات الطالب الأكاديمية</span></div><div id="contents:j_idt216_content" class="ui-panel-content ui-widget-content">
+                    <h3></h3>
+                    <p></p>
+                    <div class="ui-g">
+
+                        <div class="ui-g-12 ui-md-9"><div id="contents:j_idt218" class="ui-panel ui-widget ui-widget-content ui-corner-all chart-panel" data-widget="widget_contents_j_idt218"><div id="contents:j_idt218_content" class="ui-panel-content ui-widget-content"><div id="contents:semestersGPA" style="direction: ltr !important; position: relative; height: 300px;" class="jqplot-target"><canvas width="1026" height="300" class="jqplot-base-canvas" style="position: absolute; left: 0px; top: 0px;"></canvas><div class="jqplot-title" style="position: absolute; top: 0px; left: 0px; width: 1026px; text-align: center;">معدل الطالب الفصلي</div><div class="jqplot-axis jqplot-xaxis" style="position: absolute; width: 1026px; height: 56px; left: 0px; bottom: 0px;"><canvas width="71" height="16" class="jqplot-xaxis-label" style="position: absolute; left: 510px; bottom: 0px;"></canvas><canvas width="37" height="30" class="jqplot-xaxis-tick" style="text-align: left; position: absolute; left: 512.25px;"></canvas></div><div class="jqplot-axis jqplot-yaxis" style="position: absolute; height: 300px; width: 65px; left: 0px; top: 0px;"><canvas width="16" height="68" class="jqplot-yaxis-label" style="position: absolute; top: 103px; left: 0px;"></canvas><canvas width="25" height="15" class="jqplot-yaxis-tick" style="text-align: left; position: absolute; top: 226.5px;"></canvas><canvas width="32" height="15" class="jqplot-yaxis-tick" style="text-align: left; position: absolute; top: 187.7px;"></canvas><canvas width="32" height="15" class="jqplot-yaxis-tick" style="text-align: left; position: absolute; top: 148.9px;"></canvas><canvas width="32" height="15" class="jqplot-yaxis-tick" style="text-align: left; position: absolute; top: 110.1px;"></canvas><canvas width="32" height="15" class="jqplot-yaxis-tick" style="text-align: left; position: absolute; top: 71.3px;"></canvas><canvas width="39" height="15" class="jqplot-yaxis-tick" style="text-align: left; position: absolute; top: 32.5px;"></canvas></div><canvas width="1026" height="300" class="jqplot-grid-canvas" style="position: absolute; left: 0px; top: 0px;"></canvas><canvas width="941" height="194" class="jqplot-series-shadowCanvas" style="position: absolute; left: 75px; top: 40px;"></canvas><canvas width="941" height="194" class="jqplot-series-shadowCanvas" style="position: absolute; left: 75px; top: 40px;"></canvas><canvas width="941" height="194" class="jqplot-series-shadowCanvas" style="position: absolute; left: 75px; top: 40px;"></canvas><canvas width="941" height="194" class="jqplot-series-shadowCanvas" style="position: absolute; left: 75px; top: 40px;"></canvas><canvas width="941" height="194" class="jqplot-series-canvas" style="position: absolute; left: 75px; top: 40px;"></canvas><div class="jqplot-point-label jqplot-series-0 jqplot-point-0" style="position: absolute; left: 469.375px; top: 57.844px;">77.40</div><canvas width="941" height="194" class="jqplot-series-canvas" style="position: absolute; left: 75px; top: 40px;"></canvas><div class="jqplot-point-label jqplot-series-1 jqplot-point-0" style="position: absolute; left: 512.125px; top: 74.916px;">68.60</div><canvas width="941" height="194" class="jqplot-series-canvas" style="position: absolute; left: 75px; top: 40px;"></canvas><div class="jqplot-point-label jqplot-series-2 jqplot-point-0" style="position: absolute; left: 554.875px; top: 72.006px;">70.10</div><canvas width="941" height="194" class="jqplot-series-canvas" style="position: absolute; left: 75px; top: 40px;"></canvas><div class="jqplot-point-label jqplot-series-3 jqplot-point-0" style="position: absolute; left: 600.625px; top: 208px;">0.00</div><div class="jqplot-cursor-tooltip" style="position: absolute; display: none;"></div><canvas width="941" height="194" class="jqplot-highlight-canvas" style="position: absolute; left: 75px; top: 40px;"></canvas><div class="jqplot-highlighter-tooltip" style="position: absolute; display: none;"></div><canvas width="941" height="194" class="jqplot-barRenderer-highlight-canvas" style="position: absolute; left: 75px; top: 40px;"></canvas><canvas width="941" height="194" class="jqplot-event-canvas" style="position: absolute; left: 75px; top: 40px;"></canvas><table class="jqplot-table-legend" style="position: absolute; z-index: 3; right: 10px; top: 40px;"><tbody><tr class="jqplot-table-legend"><td class="jqplot-table-legend jqplot-table-legend-swatch jqplot-seriesToggle" style="text-align: center; padding-top: 0px;"><div class="jqplot-table-legend-swatch-outline"><div class="jqplot-table-legend-swatch" style="background-color: rgb(75, 178, 197); border-color: rgb(75, 178, 197);"></div></div></td><td class="jqplot-table-legend jqplot-table-legend-label jqplot-seriesToggle" style="padding-top: 0px;">الفصل الأول 2024/2025</td></tr><tr class="jqplot-table-legend"><td class="jqplot-table-legend jqplot-table-legend-swatch jqplot-seriesToggle" style="text-align: center; padding-top: 0.5em;"><div class="jqplot-table-legend-swatch-outline"><div class="jqplot-table-legend-swatch" style="background-color: rgb(234, 162, 40); border-color: rgb(234, 162, 40);"></div></div></td><td class="jqplot-table-legend jqplot-table-legend-label jqplot-seriesToggle" style="padding-top: 0.5em;">الفصل الثاني 2024/2025</td></tr><tr class="jqplot-table-legend"><td class="jqplot-table-legend jqplot-table-legend-swatch jqplot-seriesToggle" style="text-align: center; padding-top: 0.5em;"><div class="jqplot-table-legend-swatch-outline"><div class="jqplot-table-legend-swatch" style="background-color: rgb(197, 180, 127); border-color: rgb(197, 180, 127);"></div></div></td><td class="jqplot-table-legend jqplot-table-legend-label jqplot-seriesToggle" style="padding-top: 0.5em;">الفصل الصيفي 2024/2025</td></tr><tr class="jqplot-table-legend"><td class="jqplot-table-legend jqplot-table-legend-swatch jqplot-seriesToggle" style="text-align: center; padding-top: 0.5em;"><div class="jqplot-table-legend-swatch-outline"><div class="jqplot-table-legend-swatch" style="background-color: rgb(87, 149, 117); border-color: rgb(87, 149, 117);"></div></div></td><td class="jqplot-table-legend jqplot-table-legend-label jqplot-seriesToggle" style="padding-top: 0.5em;">الفصل الأول 2025/2026</td></tr></tbody></table></div></div></div>
+                        </div>
+                        <div class="ui-g-12 ui-md-3">
+
+                        </div>
+
+
+                    </div></div></div>
+            </div>
+        </div><div id="contents:j_idt226" class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-shadow ui-hidden-container ui-dialog-rtl ui-draggable ui-resizable" role="dialog" aria-labelledby="contents:j_idt226_title" aria-hidden="true" style="width: auto; height: auto;"><div class="ui-dialog-titlebar ui-widget-header ui-helper-clearfix ui-corner-top ui-draggable-handle"><span id="contents:j_idt226_title" class="ui-dialog-title">تفاصيل الخبر</span><a href="https://portal.zuj.edu.jo/faces/ui/pages/student/index.xhtml#" class="ui-dialog-titlebar-icon ui-dialog-titlebar-close ui-corner-all" aria-label="Close" role="button"><span class="ui-icon ui-icon-closethick"></span></a></div><div class="ui-dialog-content ui-widget-content" style="height: auto;"><div id="contents:j_idt227" class="ui-scrollpanel ui-widget ui-widget-content"><div id="contents:newsPanel" class="ui-panel ui-widget ui-widget-content ui-corner-all" data-widget="widget_contents_newsPanel"><div id="contents:newsPanel_header" class="ui-panel-titlebar ui-widget-header ui-helper-clearfix ui-corner-all"><span class="ui-panel-title"></span></div><div id="contents:newsPanel_content" class="ui-panel-content ui-widget-content"><table id="contents:j_idt228" class="ui-panelgrid ui-widget" role="grid"><tbody><tr class="ui-widget-content" role="row"><td role="gridcell" class="ui-panelgrid-cell"></td></tr><tr class="ui-widget-content" role="row"><td role="gridcell" class="ui-panelgrid-cell"><img id="contents:j_idt230" height="10px;" alt="" src="./جامعة الزيتونة الأردنية_files/dot_clear.gif"></td></tr><tr class="ui-widget-content" role="row"><td role="gridcell" class="ui-panelgrid-cell"><label id="contents:j_idt231" class="ui-outputlabel ui-widget"></label></td></tr></tbody></table></div></div></div></div><div class="ui-resizable-handle ui-resizable-n" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-s" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-e" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-w" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-ne" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-nw" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-sw" style="z-index: 90;"></div></div>
+
+    <div class="footer clearfix">
+        <div class="card">
+            <div class="ui-g footer-content">
+
+                <div style="alignment-adjust: central;">
+                    <a href="https://www.facebook.com/AlZaytoonahUniversityOfficial" target="_blank"><i class="fa fa-facebook-square" style="color: #3b5998;"></i></a>
+                    <a href="https://twitter.com/alzaytoonahunv" target="_blank"><i class="fa fa-twitter" style="color: #00acee;"></i></a>
+                    <a href="https://www.youtube.com/alzaytoonahuniversity" target="_blank"><i class="fa fa-youtube" style="color: #ff0000;"></i></a>
+                    <a href="https://www.linkedin.com/company/al-zaytoonah-university-of-jordan" target="_blank"><i class="fa fa-linkedin" style="color: #0072b1;"></i></a>
+                    <a href="https://en.wikipedia.org/wiki/Al-Zaytoonah_University_of_Jordan" target="_blank"><i class="fa fa-wikipedia-w" style="color: #000000;"></i></a>
+                </div>
+            </div>
+            <div class="footer-desg"><img id="contents:j_idt233" src="./جامعة الزيتونة الأردنية_files/edugateWhite.svg" alt="" style="width: 10%;"><img id="contents:j_idt234" alt="" src="./جامعة الزيتونة الأردنية_files/dot_clear.gif" style="width: 0%;">
+                جامعة الزيتونة الأردنية 2020
+            </div>
+        </div>
+    </div>
+                        </div>
+
+
+                    </div><input type="hidden" name="javax.faces.ViewState" id="j_id1:javax.faces.ViewState:3" value="3125881992265779451:8707827611106217298" autocomplete="off">
+</form>
+            </div><div id="j_idt238"></div><div id="j_idt239" class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-shadow ui-hidden-container" role="dialog" aria-labelledby="j_idt239_title" aria-hidden="true" style="width: auto; height: auto;"><div class="ui-dialog-content ui-widget-content" style="height: auto;">
+                <i class="fa fa-circle-o-notch fa-spin ajax-loader" aria-hidden="true"></i></div></div><div id="j_idt241" style="width:32px;height:32px;position:fixed;right:7px;bottom:7px"><div id="j_idt241_start" style="display:none">
+                    <i class="fa fa-circle-o-notch fa-spin ajax-loader" aria-hidden="true"></i></div><div id="j_idt241_complete" style="display:none"></div></div>
+<div id="textarea_simulator" style="position: absolute; top: 0px; left: 0px; visibility: hidden;"></div><div id="j_idt38:j_idt42_panel" class="ui-selectonemenu-panel ui-widget ui-widget-content ui-corner-all ui-helper-hidden ui-shadow"><div class="ui-selectonemenu-items-wrapper" style="height:auto"><ul id="j_idt38:j_idt42_items" class="ui-selectonemenu-items ui-selectonemenu-list ui-widget-content ui-widget ui-corner-all ui-helper-reset" role="listbox" aria-activedescendant="j_idt38:j_idt42_0"><li class="ui-selectonemenu-item ui-selectonemenu-list-item ui-corner-all ui-state-highlight" data-label="يرجى الاختيار ..." tabindex="-1" role="option" id="j_idt38:j_idt42_0">يرجى الاختيار ...</li><li class="ui-selectonemenu-item ui-selectonemenu-list-item ui-corner-all" data-label="العربية" tabindex="-1" role="option" id="j_idt38:j_idt42_1">العربية</li><li class="ui-selectonemenu-item ui-selectonemenu-list-item ui-corner-all" data-label="English" tabindex="-1" role="option" id="j_idt38:j_idt42_2">English</li></ul></div></div><div id="j_idt38:j_idt48_panel" class="ui-selectonemenu-panel ui-widget ui-widget-content ui-corner-all ui-helper-hidden ui-shadow"><div class="ui-selectonemenu-items-wrapper" style="height:200px"><ul id="j_idt38:j_idt48_items" class="ui-selectonemenu-items ui-selectonemenu-list ui-widget-content ui-widget ui-corner-all ui-helper-reset" role="listbox" aria-activedescendant="j_idt38:j_idt48_0"><li class="ui-selectonemenu-item ui-selectonemenu-list-item ui-corner-all ui-state-highlight" data-label="يرجى الاختيار ..." tabindex="-1" role="option" id="j_idt38:j_idt48_0">يرجى الاختيار ...</li><li class="ui-selectonemenu-item ui-selectonemenu-list-item ui-corner-all" data-label="blue" tabindex="-1" role="option" id="j_idt38:j_idt48_1">blue</li><li class="ui-selectonemenu-item ui-selectonemenu-list-item ui-corner-all" data-label="teal" tabindex="-1" role="option" id="j_idt38:j_idt48_2">teal</li><li class="ui-selectonemenu-item ui-selectonemenu-list-item ui-corner-all" data-label="cyan" tabindex="-1" role="option" id="j_idt38:j_idt48_3">cyan</li><li class="ui-selectonemenu-item ui-selectonemenu-list-item ui-corner-all" data-label="blue-grey" tabindex="-1" role="option" id="j_idt38:j_idt48_4">blue-grey</li><li class="ui-selectonemenu-item ui-selectonemenu-list-item ui-corner-all" data-label="dark-blue" tabindex="-1" role="option" id="j_idt38:j_idt48_5">dark-blue</li><li class="ui-selectonemenu-item ui-selectonemenu-list-item ui-corner-all" data-label="dark-green" tabindex="-1" role="option" id="j_idt38:j_idt48_6">dark-green</li><li class="ui-selectonemenu-item ui-selectonemenu-list-item ui-corner-all" data-label="light-blue" tabindex="-1" role="option" id="j_idt38:j_idt48_7">light-blue</li><li class="ui-selectonemenu-item ui-selectonemenu-list-item ui-corner-all" data-label="indigo" tabindex="-1" role="option" id="j_idt38:j_idt48_8">indigo</li><li class="ui-selectonemenu-item ui-selectonemenu-list-item ui-corner-all" data-label="deep-purple" tabindex="-1" role="option" id="j_idt38:j_idt48_9">deep-purple</li><li class="ui-selectonemenu-item ui-selectonemenu-list-item ui-corner-all" data-label="green" tabindex="-1" role="option" id="j_idt38:j_idt48_10">green</li></ul></div></div><div class="ui-dialog-docking-zone"></div><div id="contents:msgs_container" class="ui-growl ui-widget" style="z-index: 1001;"></div>
+<script>
+// اختيار جميع الروابط التي تحتوي على الأيقونات
+const menuLinks = document.querySelectorAll('.tabmenuitem-link');
+const container = document.querySelector('.layout-menu-container');
+
+menuLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const parentLi = this.parentElement;
+        
+        // 1. إذا كان العنصر مضغوطاً عليه أصلاً (نشط)، نقوم بإغلاق المنيو وإزالة حالة النشاط
+        if (parentLi.classList.contains('active-item')) {
+            parentLi.classList.remove('active-item');
+            container.style.display = "none";
+        } 
+        // 2. إذا ضغطنا على أيقونة جديدة
+        else {
+            // إزالة حالة النشاط من جميع الأيقونات الأخرى
+            document.querySelectorAll('.layout-tabmenu-nav li').forEach(li => {
+                li.classList.remove('active-item');
+            });
+            
+            // تفعيل الأيقونة الحالية وإظهار المنيو
+            parentLi.classList.add('active-item');
+            container.style.display = "block";
+            
+            // هنا يمكنك إضافة منطق لتغيير محتوى الـ container بناءً على الأيقونة
+            // مثلاً: if (this.innerText.includes('home')) { ... }
+        }
+    });
+});
+        function openImage(src) {
+    document.getElementById("imageModal").style.display = "block";
+    document.getElementById("img01").src = src;
+}
+
+function closeModal() {
+    document.getElementById("imageModal").style.display = "none";
+}
+    </script>
+<div id="imageModal" class="modal" onclick="closeModal()">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="img01">
+</div>
+</body></html>
